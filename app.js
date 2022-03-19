@@ -6,7 +6,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 
-// const AppError = require('./utils/appError');
+const AppError = require('./Utils/appError');
 // const globalErrorHandler = require('./controllers/errorController');
 // const tourRouter = require('./routes/tourRoutes');
 const authRouter = require('./Routes/authRoutes');
@@ -67,9 +67,9 @@ app.use((req, res, next) => {
 // app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', authRouter);
 
-// app.all('*', (req, res, next) => {
-//   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
-// });
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
 
 // app.use(globalErrorHandler);
 
