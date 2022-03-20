@@ -7,14 +7,14 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 
 const AppError = require('./Utils/appError');
-// const globalErrorHandler = require('./controllers/errorController');
-// const tourRouter = require('./routes/tourRoutes');
+
 const authRouter = require('./Routes/authRoutes');
 const userRoute = require('./Routes/userRoute');
 
 const app = express();
 
-// 1) GLOBAL MIDDLEWARES
+//GLOBAL MIDDLEWARES
+
 // Set security HTTP headers
 app.use(helmet());
 
@@ -57,12 +57,6 @@ app.use(
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
 
-// Test middleware
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  // console.log(req.headers);
-  next();
-});
 
 // 3) ROUTES
 // app.use('/api/v1/tours', tourRouter);

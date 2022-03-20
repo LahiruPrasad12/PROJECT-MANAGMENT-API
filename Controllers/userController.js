@@ -1,20 +1,23 @@
 const User = require('../Models/userModel');
 const catchAsync = require('../Utils/catchAsync');
 const AppError = require('../Utils/appError');
+const Filters = require('../Utils/filters');
 
 
 /**All users apis */
 
 //get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+  const Respond = new Filters(User.find(),req.query).filter().sort().limitFields().paginate();
 
+  const filteredData = await Respond.query;
+ 
   // SEND RESPONSE
   res.status(200).json({
     status: 'success',
-    results: users.length,
+    results: filteredData.length,
     data: {
-      users
+      filteredData
     }
   });
 });
