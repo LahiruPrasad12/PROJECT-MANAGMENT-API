@@ -59,5 +59,31 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
+
+//Check passwords is correct or incorrect
+userSchema.methods.correctPassword = async function (candidatePassword,userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+//get time of change password
+userSchema.pre('save', function(next) {
+    if (!this.isModified('password') || this.isNew) return next();
+  
+    this.passwordChangedAt = Date.now() - 1000;
+    next();
+  });
+
+  //return true or false by checking change password time and jwt token issued time. JWTTimestamp will return time that token was issued
+  userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+    if (this.passwordChangedAt) {
+      const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000,10);
+  
+      return JWTTimestamp < changedTimestamp;
+    }
+  
+    // False means NOT changed
+    return false;
+  };
+
 const User = mongoose.model('User', userSchema);
 module.exports = User;
