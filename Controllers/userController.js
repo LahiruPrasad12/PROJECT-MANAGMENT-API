@@ -3,7 +3,9 @@ const catchAsync = require('../Utils/catchAsync');
 const AppError = require('../Utils/appError');
 
 
-/**All user apis */
+/**All users apis */
+
+//get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
 
@@ -17,6 +19,8 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
+
+//update user
 exports.updateMe = catchAsync(async (req, res, next) => {
 
   // Filtered out unwanted fields names that are not allowed to be updated
@@ -50,7 +54,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 
 /**Some conditions */
 
-//filter column that needed to be updated
+//filter and return column that needed to be updated
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach(el => {

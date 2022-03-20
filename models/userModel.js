@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     photo: String,
     role: {
         type: String,
-        enum: ['user', 'guide', 'lead-guide', 'admin'],
+        enum: ['admin', 'staff', 'student', 'supervisor','Co-supervisor','Panel-Member'],
         default: 'user'
     },
     password: {
@@ -48,6 +48,10 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+
+/**Middleware */
+
+//This middleware perform encrypt password to save the database
 userSchema.pre('save', async function (next) {
     // Only run this function if password was actually modified
     if (!this.isModified('password')) return next();
@@ -60,11 +64,13 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
+//use this query to filter all users whose active status only true
+userSchema.pre(/^find/, function (next) {
+    // this points to the current query
+    this.find({ active: { $ne: false } });
+    next();
+});
 
-//Check passwords is correct or incorrect
-userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
-    return await bcrypt.compare(candidatePassword, userPassword);
-};
 
 //If user change password passwordChangedAt column will update. otherwise no.
 userSchema.pre('save', function (next) {
@@ -73,6 +79,14 @@ userSchema.pre('save', function (next) {
     this.passwordChangedAt = Date.now() - 1000;
     next();
 });
+/**End of the middleware */
+
+
+//Check passwords is correct or incorrect
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
+
 
 //return true or false by checking change password time and jwt token issued time. JWTTimestamp will return time that token was issued
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
@@ -101,12 +115,6 @@ userSchema.methods.createPasswordResetToken = function () {
     return resetToken;
 };
 
-//use this query to filter all users whose active status only true
-userSchema.pre(/^find/, function (next) {
-    // this points to the current query
-    this.find({ active: { $ne: false } });
-    next();
-});
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
