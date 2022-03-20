@@ -62,45 +62,51 @@ userSchema.pre('save', async function (next) {
 
 
 //Check passwords is correct or incorrect
-userSchema.methods.correctPassword = async function (candidatePassword,userPassword) {
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-  //If user change password passwordChangedAt column will update. otherwise no.
-userSchema.pre('save', function(next) {
+//If user change password passwordChangedAt column will update. otherwise no.
+userSchema.pre('save', function (next) {
     if (!this.isModified('password') || this.isNew) return next();
-  
+
     this.passwordChangedAt = Date.now() - 1000;
     next();
-  });
+});
 
-  //return true or false by checking change password time and jwt token issued time. JWTTimestamp will return time that token was issued
-  userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+//return true or false by checking change password time and jwt token issued time. JWTTimestamp will return time that token was issued
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     if (this.passwordChangedAt) {
-      const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000,10);
-  
-      return JWTTimestamp < changedTimestamp;
+        const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+
+        return JWTTimestamp < changedTimestamp;
     }
-  
+
     // False means NOT changed
     return false;
-  };
+};
 
 
-  //create token for reset password
-  userSchema.methods.createPasswordResetToken = function() {
+//create token for reset password
+userSchema.methods.createPasswordResetToken = function () {
     const resetToken = crypto.randomBytes(32).toString('hex');
-  
+
     this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-  
+
     console.log({ resetToken }, this.passwordResetToken);
-  
+
     //set expiration time for rest password token
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-  
-    return resetToken;
-  };
 
+    return resetToken;
+};
+
+//use this query to filter all users whose active status only true
+userSchema.pre(/^find/, function (next) {
+    // this points to the current query
+    this.find({ active: { $ne: false } });
+    next();
+});
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
