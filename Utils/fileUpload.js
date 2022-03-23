@@ -1,4 +1,5 @@
 const multer = require('multer');
+const AppError = require('../Utils/appError');
 
 //Set path file to save
 exports.setPath = (path)=>  multer.diskStorage({
