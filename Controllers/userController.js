@@ -6,23 +6,21 @@ const multer = require('multer');
 
 
 /**Upload a profile picture */
-// const multerStorage = multer.memoryStorage();
-
 const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/img/users');
+  destination: (req, file, next) => {
+    next(null, 'public/img/users');
   },
-  filename: (req, file, cb) => {
+  filename: (req, file, next) => {
     const ext = file.mimetype.split('/')[1];
-    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+    next(null, `user-${req.user.id}-${Date.now()}.${ext}`);
   }
 });
 
-const multerFilter = (req, file, cb) => {
+const multerFilter = (req, file, next) => {
   if (file.mimetype.startsWith('image')) {
-    cb(null, true);
+    next(null, true);
   } else {
-    cb(new AppError('Not an image! Please upload only images.', 400), false);
+    next(new AppError('Not an image! Please upload only images.', 400), false);
   }
 };
 
@@ -32,6 +30,8 @@ const upload = multer({
 });
 
 exports.uploadUserPhoto = upload.single('photo');
+
+
 
 /**All users apis */
 
