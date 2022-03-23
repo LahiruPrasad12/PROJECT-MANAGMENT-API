@@ -9,7 +9,7 @@ const multer = require('multer');
 /**Upload a profile picture */
 
 const multerStorage = FileUpload.setPath('public/img/users')
-const multerFilter = FileUpload.ImageFilter('image')
+const multerFilter = FileUpload.FileTypeFilter('image')
 
 const upload = multer({
   storage: multerStorage ,

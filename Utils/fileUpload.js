@@ -1,5 +1,6 @@
 const multer = require('multer');
 
+//Set path file to save
 exports.setPath = (path)=>  multer.diskStorage({
     destination: (req, file, next) => {
       next(null, `${path}`);
@@ -10,10 +11,11 @@ exports.setPath = (path)=>  multer.diskStorage({
     }
 });
 
-exports.ImageFilter =(type)=> (req, file, next) => {
+//Filter file type
+exports.FileTypeFilter =(type)=> (req, file, next) => {
     if (file.mimetype.startsWith(`${type}`)) {
       next(null, true);
     } else {
-      next(new AppError('Not an image! Please upload only images.', 400), false);
+      next(new AppError(`Not an ${type}! Please upload only images.`, 400), false);
     }
 };
