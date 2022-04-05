@@ -22,21 +22,6 @@ exports.uploadUserPhoto = upload.single('photo');
 
 /**All users apis */
 
-//get all users
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const Respond = new Filters(User.find(),req.query).filter().sort().limitFields().paginate();
-
-  const filteredData = await Respond.query;
- 
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: filteredData.length,
-    data: {
-      filteredData
-    }
-  });
-});
 
 
 //update user
