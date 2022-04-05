@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
       },
     role: {
         type: String,
-        enum: ['admin', 'staff', 'student', 'supervisor','Co-supervisor','Panel-Member','user'],
+        enum: ['admin', 'staff', 'student', 'supervisor','Co-supervisor','Panel-Member'],
         default: 'student'
     },
     password: {
@@ -41,6 +41,8 @@ const userSchema = new mongoose.Schema({
             message: 'Passwords are not the same!'
         }
     },
+    groupID:String,
+    researchFileId:String,
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,

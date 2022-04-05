@@ -8,7 +8,7 @@ exports.setPath = (path)=>  multer.diskStorage({
     },
     filename: (req, file, next) => {
       const ext = file.mimetype.split('/')[1];
-      next(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+      next(null, `user-${Date.now()}.${ext}`);
     }
 });
 

@@ -122,6 +122,10 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     createSendToken(user, 200, res);
   });
 
+
+
+
+
 /**End of the auth controllers */
 
 
@@ -137,6 +141,8 @@ const signToken = id => {
         expiresIn: process.env.JWT_EXPIRES_IN
     });
 };
+
+
 
 
 //crate new token and send it
