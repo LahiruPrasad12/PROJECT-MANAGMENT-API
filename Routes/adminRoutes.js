@@ -11,8 +11,7 @@ router.route('/:id')
     .delete(authController.protect,authController.restrictTo('admin'), adminController.deleteUser)
     .patch(authController.protect,authController.restrictTo('admin'), adminController.updateUser);
 router.route('/document')
-    .post(adminController.document, adminController.uploadDocument)
-    .patch(authController.protect,authController.restrictTo('admin'), adminController.updateUser);
+    .post(authController.protect,adminController.document, adminController.uploadDocument)
 
 
 module.exports = router;
