@@ -5,6 +5,5 @@ const router = express.Router();
 
 router.route('/')
     .get(authController.protect, authController.restrictTo('admin'), userController.getAllUsers)
-    .delete(authController.protect, userController.deleteUser)
-router.delete('/:id', authController.resetPassword);
+router.delete('/:id',authController.protect,authController.restrictTo('admin'), authController.deleteUser);
 module.exports = router;

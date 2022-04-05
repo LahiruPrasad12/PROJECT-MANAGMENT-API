@@ -122,6 +122,16 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     createSendToken(user, 200, res);
   });
 
+
+  //admin delete user
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.params.id, { active: false });
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
 /**End of the auth controllers */
 
 
