@@ -11,6 +11,7 @@ const AppError = require('./Utils/appError');
 const authRouter = require('./Routes/authRoutes');
 const userRoute = require('./Routes/userRoute');
 const adminRoute = require('./Routes/adminRoutes');
+const commonRoute = require('./Routes/commonRoutes');
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use(express.static(`${__dirname}/public`));
 // 3) ROUTES
 // app.use('/api/v1/tours', tourRouter);
 app.use('/', authRouter);
+app.use('/api/', commonRoute);
 app.use('/api/users', userRoute);
 app.use('/api/admins', adminRoute);
 
