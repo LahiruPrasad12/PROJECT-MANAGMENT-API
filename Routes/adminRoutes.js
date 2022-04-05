@@ -4,7 +4,7 @@ const authController = require('../Controllers/authController');
 const router = express.Router();
 
 router.route('/')
-    .patch(authController.protect, userController.uploadUserPhoto, userController.updateMe)
-    .delete(authController.protect, userController.deleteMe)
-
+    .get(authController.protect, authController.restrictTo('admin'), userController.getAllUsers)
+    .delete(authController.protect, userController.deleteUser)
+router.delete('/:id', authController.resetPassword);
 module.exports = router;

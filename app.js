@@ -10,6 +10,7 @@ const AppError = require('./Utils/appError');
 
 const authRouter = require('./Routes/authRoutes');
 const userRoute = require('./Routes/userRoute');
+const adminRoute = require('./Routes/adminRoutes');
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use(express.static(`${__dirname}/public`));
 // app.use('/api/v1/tours', tourRouter);
 app.use('/', authRouter);
 app.use('/api/users', userRoute);
+app.use('/api/admins', adminRoute);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
