@@ -4,6 +4,6 @@ const authController = require('../Controllers/authController')
 const router = express.Router();
 
 router.route('/')
-    .post(groupController.createGroup)
+    .post(authController.protect, groupController.createGroup)
 
 module.exports = router;
