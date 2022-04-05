@@ -132,6 +132,27 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     data: null
   });
 });
+
+ //admin update user
+exports.updateUser = catchAsync(async (req, res, next) => {
+
+  // Filtered out unwanted fields names that are not allowed to be updated
+  const filteredBody = filterObj(req.body, 'name', 'email');
+
+  // Update user document
+  const updatedUser = await User.findByIdAndUpdate(req.params.id, filteredBody, {
+    new: true,
+    runValidators: true
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updatedUser
+    }
+  });
+});
+
 /**End of the auth controllers */
 
 
@@ -148,6 +169,15 @@ const signToken = id => {
     });
 };
 
+
+//filter and return column that needed to be updated
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
 
 //crate new token and send it
 const createSendToken = (user, statusCode, res) => {
