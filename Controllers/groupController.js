@@ -40,9 +40,13 @@ exports.createGroup = catchAsync(async (req, res, next) => {
 //Assign student to group
 exports.assignGroup = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email, active: true });
+
+    //Check whether user is exists or user doesn't have an group
     if (!user) return next(new AppError('Please enter valid email', 406))
     if (user.groupID) return next(new AppError('This user already have an account', 404))
+
     user.groupID = req.user.groupID
+    const group = await Group.findById(req.user.groupID)
     await user.save({ validateBeforeSave: false })
 
 
@@ -50,12 +54,12 @@ exports.assignGroup = catchAsync(async (req, res, next) => {
         await sendEmail({
             email: req.body.email,
             subject: 'Congratulations!!',
-            message :' You have been assign to group'
+            message :`You have been assign to ${group.name} by ${req.user.name}`
         });
 
         res.status(200).json({
             status: 'success',
-            message: 'Your invitation has been sent'
+            message: 'invitation has been sent'
         });
 
     } catch (err) {
