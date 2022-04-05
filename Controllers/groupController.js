@@ -1,4 +1,4 @@
-const User = require('../Models/userModel');
+const Group = require('../Models/groupModel');
 const catchAsync = require('../Utils/catchAsync');
 const AppError = require('../Utils/appError');
 const Filters = require('../Utils/filters');
@@ -7,5 +7,11 @@ const multer = require('multer');
 
 
 exports.createGroup = catchAsync(async(req,res,next)=>{
-    console.log(req.body)
+    const newGroup = await Group.create(req.body)
+    res.status(200).json({
+        status: 'success',
+        data: {
+            group: newGroup
+        }
+    });
 })

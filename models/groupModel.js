@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const groupSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Please confirm your password'],
+        required: [true, 'Please Enter name'],
+        unique: true,
+        lowercase: true,
     },
     researchState: {
         type: String,

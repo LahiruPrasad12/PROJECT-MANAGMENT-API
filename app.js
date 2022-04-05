@@ -12,6 +12,7 @@ const authRouter = require('./Routes/authRoutes');
 const userRoute = require('./Routes/userRoute');
 const adminRoute = require('./Routes/adminRoutes');
 const commonRoute = require('./Routes/commonRoutes');
+const groupRoute = require('./Routes/groupRoutes');
 
 const app = express();
 
@@ -66,6 +67,7 @@ app.use('/', authRouter);
 app.use('/api/', commonRoute);
 app.use('/api/users', userRoute);
 app.use('/api/admins', adminRoute);
+app.use('/api/groups', groupRoute);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
