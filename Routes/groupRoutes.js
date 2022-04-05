@@ -6,6 +6,6 @@ const router = express.Router();
 router.route('/')
     .get(authController.protect, authController.restrictTo('admin'), groupController.getAllGroups)
     .post(authController.protect, groupController.createGroup)
-    .patch(groupController.asignGroup)
+    .patch(authController.protect, groupController.assignGroup)
 
 module.exports = router;

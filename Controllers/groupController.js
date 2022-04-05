@@ -36,12 +36,14 @@ exports.createGroup = catchAsync(async(req,res,next)=>{
     });
 })
 
-exports.asignGroup = catchAsync(async (req,res,next)=>{
-    const user = await User.findOne({ email: req.body.email });
+//Assign student to group
+exports.assignGroup = catchAsync(async (req,res,next)=>{
+    const user = await User.findOne({ email: req.body.email , active:true });
+    if(!user) return next(new AppError('Please enter valid email',402))
+    user.groupID = req.user.groupID
+    await user.save({ validateBeforeSave: false })
     res.status(200).json({
         status: 'success',
-        data: {
-            group: user
-        }
+        
     });
 })
