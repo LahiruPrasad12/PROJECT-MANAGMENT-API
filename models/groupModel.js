@@ -7,13 +7,7 @@ const groupSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
     },
-    researchState: {
-        type: String,
-        enum: ['No', 'Draft','Pending','Active','Decline'],
-        default: 'No'
-    },
-    researchFileId:String,
-    topicName :String,
+    topicID : String
 });
 
 const Group = mongoose.model('Groups', groupSchema);
