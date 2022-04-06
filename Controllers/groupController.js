@@ -83,9 +83,8 @@ exports.assignGroup = catchAsync(async (req, res, next) => {
 //Register Topic
 exports.registerTopic = catchAsync(async (req, res, next) => {
     if (req.group.researchState === 'No' || req.group.researchState === 'Decline') {
-        const filteredBody = ColumnFilter.filterObj(req.body, 'topicName', 'researchFileId');
-        filteredBody.researchState = 'Draft'
-        const updateGroup = await Group.findByIdAndUpdate(req.user.groupID, filteredBody, {
+        req.body.researchState = 'Draft'
+        const updateGroup = await Group.findByIdAndUpdate(req.user.groupID, req.body, {
             new: true,
             runValidators: true
         });
