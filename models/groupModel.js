@@ -14,7 +14,8 @@ const groupSchema = new mongoose.Schema({
     },
     researchFileId:Number,
     researchTopic:String,
-    feedBack:String
+    supervisorFeedBack:String,
+    co_supervisorFeedBack:String
 });
 
 const Group = mongoose.model('Groups', groupSchema);
