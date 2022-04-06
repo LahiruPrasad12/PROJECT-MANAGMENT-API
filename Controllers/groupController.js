@@ -6,6 +6,7 @@ const multer = require('multer');
 const Group = require('../Models/groupModel');
 const User = require('../Models/userModel');
 const sendEmail = require('../Utils/email');
+const ColumnFilter = require('../Utils/updateColumnFilter');
 
 
 
@@ -25,7 +26,7 @@ exports.getAllGroups = catchAsync(async (req, res, next) => {
     });
 });
 
-
+//created group
 exports.createGroup = catchAsync(async (req, res, next) => {
     const newGroup = await Group.create(req.body)
     await User.findByIdAndUpdate(req.user.id, { groupID: newGroup.id })
@@ -36,6 +37,7 @@ exports.createGroup = catchAsync(async (req, res, next) => {
         }
     });
 })
+
 
 //Assign student to group
 exports.assignGroup = catchAsync(async (req, res, next) => {
@@ -54,7 +56,7 @@ exports.assignGroup = catchAsync(async (req, res, next) => {
         await sendEmail({
             email: req.body.email,
             subject: 'Congratulations!!',
-            message :`You have been assign to ${group.name} by ${req.user.name}`
+            message: `You have been assign to ${group.name} by ${req.user.name}`
         });
 
         res.status(200).json({
@@ -74,4 +76,25 @@ exports.assignGroup = catchAsync(async (req, res, next) => {
         status: 'success',
 
     });
+})
+
+
+
+//Register Topic
+exports.registerTopic = catchAsync(async (req, res, next) => {
+    if (req.group.researchState === 'No' || req.group.researchState === 'Decline') {
+        const filteredBody = ColumnFilter.filterObj(req.body, 'topicName', 'researchFileId');
+        filteredBody.researchState = 'Draft'
+        const updateGroup = await Group.findByIdAndUpdate(req.user.groupID, filteredBody, {
+            new: true,
+            runValidators: true
+        });
+        res.status(200).json({
+            status: 'success',
+            updated_group: updateGroup
+        })
+    }else{
+        next(new AppError('You alredy have submitted the research topic',408))
+    }
+
 })

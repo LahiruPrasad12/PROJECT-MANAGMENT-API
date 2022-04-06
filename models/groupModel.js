@@ -12,9 +12,8 @@ const groupSchema = new mongoose.Schema({
         enum: ['No', 'Draft','Pending','Active','Decline'],
         default: 'No'
     },
-    researchFileId:Number,
-    researchTopic:String,
-    feedBack:String
+    researchFileId:String,
+    topicName :String,
 });
 
 const Group = mongoose.model('Groups', groupSchema);
