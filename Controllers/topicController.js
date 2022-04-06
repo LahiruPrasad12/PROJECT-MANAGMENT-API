@@ -9,7 +9,7 @@ const Topic = require('../Models/topicModel');
 const sendEmail = require('../Utils/email');
 const ColumnFilter = require('../Utils/updateColumnFilter');
 
-const multerStorage = FileUpload.setPath('public/pdf/admin')
+const multerStorage = FileUpload.setPath('public/documents/topicdocument')
 const multerFilter = FileUpload.FileTypeFilter('application')
 
 const upload = multer({
@@ -40,24 +40,20 @@ exports.getTopics = catchAsync(async (req, res, next) => {
 
 //Register Topic
 exports.registerTopic = catchAsync(async (req, res, next) => {
-    const topic = await Topic.findOne({ groupID: req.user.groupID })
-    if (topic && topic.state !== 'decline') {
-        next(new AppError('You already have submitted topic', 408))
-    } else {
-        const { name, state, researchFieldID, supervisorID } = req.body;
-        const url = req.file.filename
-        const obj = new Topic({
-            name, url, state, researchFieldID, supervisorID
-        })
-        obj.groupID = req.user.groupID
-        const newDocument = await Topic.create(obj);
-        res.status(200).json({
-            status: 'success',
-            data: {
-                user: newDocument
-            }
-        });
-    }
+
+    const { name, state, researchFieldID, supervisorID } = req.body;
+    const url = req.file.filename
+    const obj = new Topic({
+        name, url, state, researchFieldID, supervisorID
+    })
+    obj.groupID = req.user.groupID
+    const newDocument = await Topic.create(obj);
+    res.status(200).json({
+        status: 'success',
+        data: {
+            user: newDocument
+        }
+    });
 
 
 })
