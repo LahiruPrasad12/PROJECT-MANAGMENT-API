@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const groupSchema = new mongoose.Schema({
+const topicSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Please Enter name'],
@@ -26,5 +26,5 @@ const groupSchema = new mongoose.Schema({
     co_supervisorID:String
 });
 
-const Group = mongoose.model('Groups', groupSchema);
-module.exports = Group;
+const Topic = mongoose.model('Topic', topicSchema);
+module.exports = Topic;
