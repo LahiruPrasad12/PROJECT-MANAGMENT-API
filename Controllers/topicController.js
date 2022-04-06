@@ -19,8 +19,6 @@ const upload = multer({
 
 exports.document = upload.single('doc');
 
-
-
 //get all topics
 exports.getTopics = catchAsync(async (req, res, next) => {
     const Respond = new Filters(Topic.find(), req.query).filter().sort().limitFields().paginate();
@@ -42,10 +40,14 @@ exports.getTopics = catchAsync(async (req, res, next) => {
 
 //Register Topic
 exports.registerTopic = catchAsync(async (req, res, next) => {
-        const { name, state, researchFieldID,supervisorID } = req.body;
+    const topic = await Topic.findOne({ groupID: req.user.groupID })
+    if (topic && topic.state !== 'decline') {
+        next(new AppError('You already have submitted topic', 408))
+    } else {
+        const { name, state, researchFieldID, supervisorID } = req.body;
         const url = req.file.filename
         const obj = new Topic({
-            name,url, state, researchFieldID,supervisorID
+            name, url, state, researchFieldID, supervisorID
         })
         obj.groupID = req.user.groupID
         const newDocument = await Topic.create(obj);
@@ -55,5 +57,7 @@ exports.registerTopic = catchAsync(async (req, res, next) => {
                 user: newDocument
             }
         });
-   
+    }
+
+
 })

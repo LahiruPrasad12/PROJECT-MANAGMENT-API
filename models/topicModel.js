@@ -9,7 +9,7 @@ const topicSchema = new mongoose.Schema({
     },
     state: {
         type: String,
-        enum: ['supervisorPending', 'co-supervisorPending', 'approved'],
+        enum: ['supervisorPending', 'co-supervisorPending', 'approved','decline'],
 
     },
     url: {
