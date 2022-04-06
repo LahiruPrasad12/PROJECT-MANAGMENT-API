@@ -13,6 +13,7 @@ const userRoute = require('./Routes/userRoute');
 const adminRoute = require('./Routes/adminRoutes');
 const commonRoute = require('./Routes/commonRoutes');
 const groupRoute = require('./Routes/groupRoutes');
+const topicRoute = require('./Routes/researchTopicRoutes');
 
 const app = express();
 
@@ -68,6 +69,7 @@ app.use('/api/', commonRoute);
 app.use('/api/users', userRoute);
 app.use('/api/admins', adminRoute);
 app.use('/api/groups', groupRoute);
+app.use('/api/topics', topicRoute);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

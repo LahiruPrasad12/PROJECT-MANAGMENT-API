@@ -25,7 +25,7 @@ exports.getAllGroups = catchAsync(async (req, res, next) => {
     });
 });
 
-
+//created group
 exports.createGroup = catchAsync(async (req, res, next) => {
     const newGroup = await Group.create(req.body)
     await User.findByIdAndUpdate(req.user.id, { groupID: newGroup.id })
@@ -36,6 +36,7 @@ exports.createGroup = catchAsync(async (req, res, next) => {
         }
     });
 })
+
 
 //Assign student to group
 exports.assignGroup = catchAsync(async (req, res, next) => {
@@ -74,4 +75,15 @@ exports.assignGroup = catchAsync(async (req, res, next) => {
         status: 'success',
 
     });
+})
+
+
+
+//Register Topic
+exports.registerTopic = catchAsync(async(req,res,next)=>{
+   const updateGroup = await Group.findByIdAndUpdate(req.user.groupID, req.body);
+    res.status(200).json({
+        status:'success',
+        updated_group : updateGroup
+    })
 })

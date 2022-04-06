@@ -8,4 +8,7 @@ router.route('/')
     .post(authController.protect, groupController.createGroup)
     .patch(authController.protect, groupController.assignGroup)
 
+router.route('/register-topic')
+    .post(authController.protect, groupController.registerTopic)
+
 module.exports = router;
