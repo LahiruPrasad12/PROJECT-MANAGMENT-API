@@ -9,6 +9,16 @@ const Topic = require('../Models/topicModel');
 const sendEmail = require('../Utils/email');
 const ColumnFilter = require('../Utils/updateColumnFilter');
 
+const multerStorage = FileUpload.setPath('public/pdf/admin')
+const multerFilter = FileUpload.FileTypeFilter('application')
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+});
+
+exports.document = upload.single('doc');
+
 
 
 //get all topics
@@ -32,18 +42,18 @@ exports.getTopics = catchAsync(async (req, res, next) => {
 
 //Register Topic
 exports.registerTopic = catchAsync(async (req, res, next) => {
-    if (req.group.researchState === 'No' || req.group.researchState === 'Decline') {
-        req.body.researchState = 'Draft'
-        const updateGroup = await Group.findByIdAndUpdate(req.user.groupID, req.body, {
-            new: true,
-            runValidators: true
-        });
+        const { name, state, researchFieldID,supervisorID } = req.body;
+        const url = req.file.filename
+        const obj = new Topic({
+            name,url, state, researchFieldID,supervisorID
+        })
+        obj.groupID = req.user.groupID
+        const newDocument = await Topic.create(obj);
         res.status(200).json({
             status: 'success',
-            updated_group: updateGroup
-        })
-    }else{
-        next(new AppError('You alredy have submitted the research topic',408))
-    }
-
+            data: {
+                user: newDocument
+            }
+        });
+   
 })

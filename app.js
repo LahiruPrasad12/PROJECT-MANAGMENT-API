@@ -71,7 +71,7 @@ app.use('/api/users', userRoute);
 app.use('/api/admins', adminRoute);
 app.use('/api/groups', groupRoute);
 app.use('/api/topics', researchTopic);
-app.use('/api/research-topic', topic);
+app.use('/api/submit-topic', topic);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

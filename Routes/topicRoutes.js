@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.route('/')
     .get(authController.protect, authController.restrictTo('admin'), topicController.getTopics)
-    .patch(authController.protect, authController.checkGroup(), groupController.registerTopic)
+    .post(authController.protect, authController.checkGroup(),topicController.document, topicController.registerTopic)
 
 module.exports = router;

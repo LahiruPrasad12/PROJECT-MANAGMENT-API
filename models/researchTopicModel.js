@@ -9,5 +9,5 @@ const topicSchema = new mongoose.Schema({
     }
 });
 
-const Topic = mongoose.model('Topics', topicSchema);
-module.exports = Topic;
+const TopicCategory = mongoose.model('TopicCategory', topicSchema);
+module.exports = TopicCategory;

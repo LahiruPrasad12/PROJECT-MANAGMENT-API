@@ -9,7 +9,8 @@ const topicSchema = new mongoose.Schema({
     },
     state: {
         type: String,
-        enum: ['supervisorPending, co-supervisorPending, approved'],
+        enum: ['supervisorPending', 'co-supervisorPending', 'approved'],
+
     },
     url: {
         type: String,
@@ -23,7 +24,11 @@ const topicSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please select supervisor'],
     },
-    co_supervisorID:String
+    groupID:{
+        type: String,
+        required: [true, 'Please provide group id'],
+    },
+    co_supervisorID:String,
 });
 
 const Topic = mongoose.model('Topic', topicSchema);
