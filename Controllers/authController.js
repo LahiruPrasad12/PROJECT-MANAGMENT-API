@@ -210,13 +210,13 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // GRANT ACCESS TO PROTECTED ROUTE
+  // GRANT ACCESS TO PROTECTED ROUTE AND SET USER AND GROUP ID GLOBALLY
   req.user = currentUser;
   req.group = await Group.findById(currentUser.groupID)
   next();
 });
 
-//Give prmission each protected route to access
+//Give permission each protected route to access
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
