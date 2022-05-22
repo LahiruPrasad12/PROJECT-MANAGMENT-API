@@ -241,4 +241,25 @@ exports.checkGroup = () => {
   };
 };
 
+
+//get current user
+exports.currentUser = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    status: 'success',
+    data: req.user
+  });
+});
+
+
+//logout user
+exports.logout = catchAsync(async (req, res, next) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+  res.status(200).json({
+    status: 'success'
+  })
+});
+
 /**end of the middlewares */
