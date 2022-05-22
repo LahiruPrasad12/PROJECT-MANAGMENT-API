@@ -15,9 +15,13 @@ const commonRoute = require('./Routes/commonRoutes');
 const groupRoute = require('./Routes/groupRoutes');
 const researchTopic = require('./Routes/researchTopicRoutes');
 const topic = require('./Routes/topicRoutes');
+const cors = require("cors");
 
 const app = express();
-
+app.use(cors({
+  origin:["http://localhost:3000"],
+  credentials:true
+}));
 //GLOBAL MIDDLEWARES
 
 // Set security HTTP headers

@@ -210,13 +210,13 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // GRANT ACCESS TO PROTECTED ROUTE
+  // GRANT ACCESS TO PROTECTED ROUTE AND SET USER AND GROUP ID GLOBALLY
   req.user = currentUser;
   req.group = await Group.findById(currentUser.groupID)
   next();
 });
 
-//Give prmission each protected route to access
+//Give permission each protected route to access
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -240,5 +240,26 @@ exports.checkGroup = () => {
     next();
   };
 };
+
+
+//get current user
+exports.currentUser = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    status: 'success',
+    data: req.user
+  });
+});
+
+
+//logout user
+exports.logout = catchAsync(async (req, res, next) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+  res.status(200).json({
+    status: 'success'
+  })
+});
 
 /**end of the middlewares */
