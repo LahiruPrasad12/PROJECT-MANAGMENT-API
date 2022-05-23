@@ -11,4 +11,7 @@ router.route('/')
 router.route('/register-topic')
     .patch(authController.protect, authController.checkGroup(), groupController.registerTopic)
 
+router.route('/group-members')
+  .get(authController.protect, authController.checkGroup(), groupController.groupUsers)
+
 module.exports = router;

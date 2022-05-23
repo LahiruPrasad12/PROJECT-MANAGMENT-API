@@ -97,3 +97,19 @@ exports.registerTopic = catchAsync(async (req, res, next) => {
     }
 
 })
+
+
+exports.groupUsers = catchAsync(async (req, res, next) => {
+    const Respond = new Filters(User.find({groupID:req.user.groupID}), req.query).filter().sort().limitFields().paginate();
+
+    const filteredData = await Respond.query;
+
+    // SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        results: filteredData.length,
+        data: {
+            filteredData
+        }
+    });
+});
