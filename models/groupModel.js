@@ -7,7 +7,8 @@ const groupSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
     },
-    topicID : String
+    topicID : String,
+    panel_member_id : String,
 });
 
 const Group = mongoose.model('Groups', groupSchema);

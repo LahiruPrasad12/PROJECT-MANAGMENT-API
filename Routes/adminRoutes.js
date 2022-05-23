@@ -1,6 +1,7 @@
 const express = require("express");
 const adminController = require("../Controllers/adminController");
 const authController = require("../Controllers/authController");
+const groupController = require("../Controllers/groupController");
 const router = express.Router();
 
 //This api-resource route for update and delete specific student
@@ -15,6 +16,10 @@ router.route("/:id")
 
 router.route("/document")
   .post(authController.protect, adminController.document, adminController.uploadDocument);
+
+//This api-resource route for update and delete specific student
+router.route("/panel-members")
+  .patch(authController.protect, authController.restrictTo("admin"), groupController.assignPannelGroup);
 
 
 module.exports = router;
