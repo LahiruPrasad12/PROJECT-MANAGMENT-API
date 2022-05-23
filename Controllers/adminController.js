@@ -43,7 +43,7 @@ exports.uploadDocument = catchAsync(async (req, res, next) => {
 
 //get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-    const Respond = new Filters(User.find(), req.query).filter().sort().limitFields().paginate();
+    const Respond = new Filters(User.find({active:true}).select('+active'), req.query).filter().sort().limitFields().paginate();
 
     const filteredData = await Respond.query;
 
@@ -62,11 +62,12 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 //admin update user
 exports.updateUser = catchAsync(async (req, res, next) => {
 
+    console.log(req.body)
     // Filtered out unwanted fields names that are not allowed to be updated
-    const filteredBody = filterObj(req.body, 'name', 'email');
+    const filteredBody = filterObj(req.body, 'role');
 
     // Update user document
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, filteredBody, {
+    const updatedUser = await User.findByIdAndUpdate(req.body.staff_id, filteredBody, {
         new: true,
         runValidators: true
     });
