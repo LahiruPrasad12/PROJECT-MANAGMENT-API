@@ -27,3 +27,17 @@ exports.getCoSupervisorRequest = catchAsync(async (req, res, next) => {
   });
 });
 
+
+exports.acceptOrDeclineTopic = catchAsync(async (req, res, next) => {
+  const { topic_id, status } = req.body;
+  const group = await Topic.findById(topic_id)
+  group.state = status
+   group.save()
+
+  // SEND RESPONSE
+  res.status(200).json({
+    status: 'success',
+    results: `${status} topic`,
+  });
+});
+
