@@ -17,9 +17,12 @@ router.route("/:id")
 router.route("/document")
   .post(authController.protect, adminController.document, adminController.uploadDocument);
 
-//This api-resource route for update and delete specific student
 router.route("/panel-members")
   .patch(authController.protect, authController.restrictTo("admin"), groupController.assignPannelGroup);
+
+//get all roles
+router.route("/roles")
+  .get(authController.protect, authController.restrictTo("admin"), adminController.getAlRoles);
 
 
 module.exports = router;
