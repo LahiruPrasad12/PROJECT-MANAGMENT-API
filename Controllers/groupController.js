@@ -86,6 +86,7 @@ exports.assignPannelGroup = catchAsync(async (req, res, next) => {
   if (!group) return next(new AppError('Please select valid group', 406))
   if (group.panel_member_id) return next(new AppError("This group already have an panel member", 404));
 
+  console.log(panel_member)
   //Check whether user is exists or user doesn't have a group
   if (!panel_member) return next(new AppError('Please select valid panel member', 406))
   if (panel_member.role !== 'Panel-Member') return next(new AppError("Who is not a panel member", 404));
