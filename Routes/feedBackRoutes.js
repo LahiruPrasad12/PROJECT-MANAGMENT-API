@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.route('/')
+  .get(authController.protect, feedback.getFeedback)
   .post(authController.protect, feedback.sendFeedback)
 
 module.exports = router;

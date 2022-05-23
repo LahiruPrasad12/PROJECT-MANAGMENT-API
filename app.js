@@ -79,7 +79,7 @@ app.use('/api/groups', groupRoute);
 app.use('/api/topics', researchTopic);
 app.use('/api/submit-topic', topic);
 app.use('/api/supervisors', supervisors);
-app.use('/api/send-feedback', feedback);
+app.use('/api/feedback', feedback);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
