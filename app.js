@@ -16,6 +16,7 @@ const groupRoute = require('./Routes/groupRoutes');
 const researchTopic = require('./Routes/researchTopicRoutes');
 const topic = require('./Routes/topicRoutes');
 const supervisors = require('./Routes/superCosupervisorRoutes');
+const feedback = require('./Routes/feedBackRoutes');
 const cors = require("cors");
 
 const app = express();
@@ -78,6 +79,7 @@ app.use('/api/groups', groupRoute);
 app.use('/api/topics', researchTopic);
 app.use('/api/submit-topic', topic);
 app.use('/api/supervisors', supervisors);
+app.use('/api/send-feedback', feedback);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
