@@ -41,19 +41,50 @@ exports.getTopics = catchAsync(async (req, res, next) => {
 //Register Topic
 exports.registerTopic = catchAsync(async (req, res, next) => {
 
-    const { name, state, researchFieldID, supervisorID } = req.body;
-    const url = req.file.filename
-    const obj = new Topic({
-        name, url, state, researchFieldID, supervisorID
-    })
-    obj.groupID = req.user.groupID
-    const newDocument = await Topic.create(obj);
-    res.status(200).json({
-        status: 'success',
-        data: {
-            user: newDocument
-        }
-    });
+    const { name, state, category_id, supervisorID } = req.body;
+    const userExists = await User.exists({ _id: supervisorID });
+    if(userExists){
+        const url = req.file.filename
+        const obj = new Topic({
+            name, url, state, category_id, supervisorID
+        })
+        obj.groupID = req.user.groupID
+        const newDocument = await Topic.create(obj);
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user: newDocument
+            }
+        });
+    }else {
+        res.status(400).json({
+            data:'please select valid supervisor'
+        });
+    }
+})
+
+exports.submitTopicToSupervisor = catchAsync(async (req, res, next) => {
+
+    const { name, state, category_id, supervisorID } = req.body;
+    const userExists = await User.exists({ _id: supervisorID });
+    if(userExists){
+        const obj = new Topic({
+            name, state, category_id, supervisorID
+        })
+        obj.groupID = req.user.groupID
+        const newDocument = await Topic.create(obj);
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user: newDocument
+            }
+        });
+    }else {
+        res.status(400).json({
+            data:'please select valid supervisor'
+        });
+    }
+
 
 
 })

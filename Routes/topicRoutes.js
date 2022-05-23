@@ -7,4 +7,8 @@ router.route('/')
     .get(topicController.getTopics)
     .post(authController.protect, authController.checkGroup(),topicController.document, topicController.registerTopic)
 
+router.route('/supervisor-submission')
+  .get(topicController.getTopics)
+  .post(authController.protect, authController.checkGroup(), topicController.submitTopicToSupervisor)
+
 module.exports = router;
