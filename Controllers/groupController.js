@@ -43,29 +43,40 @@ exports.assignGroup = catchAsync(async (req, res, next) => {
   console.log(req.body.email);
   let errors = [];
   for (const email of req.body.email) {
-    const user = await User.findOne({ email: req.body.email, active: true });
+    const user = await User.findOne({ email: email});
     const users = await User.find({ groupID: req.user.groupID, active: true });
 
-    if(users.length>=4) return next(new AppError("Your group have maximum number of students", 406));
+    if (users.length >= 4) {
+      errors.push(`already have maximum number of element`);
+      res.status(406).json({
+        status: 406,
+        error: errors
+      });
+    }
 
     if (!user) {
       errors.push(`${email} user doesn't exists`);
       continue;
-    } else if (user.groupID) {
-      errors.push(`${email} user already have an account`);
+    } else if (user.groupID && user.groupID !== req.user.groupID) {
+      errors.push(`${email} user already have an group`);
       continue;
-    }else if(user.role !== 'student'){
+    } else if (user.role !== "student") {
       errors.push(`${email} user doesn't exists`);
       continue;
+    }else if(user.groupID === req.user.groupID){
+      errors.push(`${email} user already have group in your group`);
+      continue;
     }
+
     user.groupID = req.user.groupID;
     const group = await Group.findById(req.user.groupID);
     await user.save({ validateBeforeSave: false });
+
     try {
       await sendEmail({
         email: email,
         subject: "Congratulations!!",
-        message: `You have been assign to ${group.name} by ${req.user.name}`
+        message: `You have been assign to ${group.name} by ${req.user.name} (${req.user.email})`
       });
 
     } catch (err) {
@@ -75,15 +86,16 @@ exports.assignGroup = catchAsync(async (req, res, next) => {
       );
     }
   }
+
   if (errors.length > 0) {
     res.status(400).json({
       status: 400,
-      error:errors
+      error: errors
     });
-  }else {
+  } else {
     res.status(200).json({
-      status: "success",
-      message:"students added successfully"
+      status: 200,
+      message: "students added successfully"
     });
   }
 });
@@ -145,7 +157,7 @@ exports.registerTopic = catchAsync(async (req, res, next) => {
       updated_group: updateGroup
     });
   } else {
-    next(new AppError("You alredy have submitted the research topic", 408));
+    next(new AppError("You already have submitted the research topic", 408));
   }
 
 });
