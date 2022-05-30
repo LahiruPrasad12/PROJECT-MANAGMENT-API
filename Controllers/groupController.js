@@ -40,9 +40,13 @@ exports.createGroup = catchAsync(async (req, res, next) => {
 
 //Assign student to group
 exports.assignGroup = catchAsync(async (req, res, next) => {
+  console.log(req.body.email)
+  req.body.email.forEach((email)=>{
+    console.log(email)
+  })
   const user = await User.findOne({ email: req.body.email, active: true });
 
-  //Check whether user is exists or user doesn't have an group
+  //Check whether user is exists or user doesn't have a group
   if (!user) return next(new AppError("Please enter valid email", 406));
   if (user.groupID) return next(new AppError("This user already have an account", 404));
 
