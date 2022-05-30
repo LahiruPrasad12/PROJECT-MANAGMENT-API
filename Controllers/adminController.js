@@ -43,7 +43,7 @@ exports.uploadDocument = catchAsync(async (req, res, next) => {
 
 //get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-    const Respond = new Filters(User.find(), req.query).filter().sort().limitFields().paginate();
+    const Respond = new Filters(User.find({active:true}).select('+active'), req.query).filter().sort().limitFields().paginate();
 
     const filteredData = await Respond.query;
 
@@ -62,11 +62,12 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 //admin update user
 exports.updateUser = catchAsync(async (req, res, next) => {
 
+    console.log(req.body)
     // Filtered out unwanted fields names that are not allowed to be updated
-    const filteredBody = filterObj(req.body, 'name', 'email');
+    const filteredBody = filterObj(req.body, 'role');
 
     // Update user document
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, filteredBody, {
+    const updatedUser = await User.findByIdAndUpdate(req.body.staff_id, filteredBody, {
         new: true,
         runValidators: true
     });
@@ -90,6 +91,20 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     });
 });
 
+exports.getAlRoles = catchAsync(async (req, res, next) => {
+    const Respond = await User.find();
+    console.log(Respond)
+    let group = groupBy('role',Respond)
+
+    // SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        results: group.length,
+        data: {
+            group
+        }
+    });
+});
 
 
 //filter and return column that needed to be updated
@@ -100,3 +115,25 @@ const filterObj = (obj, ...allowedFields) => {
     });
     return newObj;
 };
+
+
+function groupBy(key, array) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+        let added = false;
+        for (let j = 0; j < result.length; j++) {
+            if (result[j][key] === array[i][key]) {
+                result[j].items.push(array[i]);
+                added = true;
+                break;
+            }
+        }
+        if (!added) {
+            const entry = { items: [] };
+            entry[key] = array[i][key];
+            entry.items.push(array[i]);
+            result.push(entry);
+        }
+    }
+    return result;
+}

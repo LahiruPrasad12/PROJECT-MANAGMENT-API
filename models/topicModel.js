@@ -9,14 +9,14 @@ const topicSchema = new mongoose.Schema({
     },
     state: {
         type: String,
-        enum: ['supervisorPending', 'co-supervisorPending', 'approved','decline'],
+    enum: ['supervisorPending', 'co_supervisorPending','pane_member_pending','panel-approved', 'approved','decline'],
+        default: 'supervisorPending'
 
     },
     url: {
         type: String,
-        required: [true, 'Please upload document'],
     },
-    researchFieldID:{
+    category_id:{
         type: String,
         required: [true, 'Please select research filed'],
     },
@@ -29,6 +29,7 @@ const topicSchema = new mongoose.Schema({
         required: [true, 'Please provide group id'],
     },
     co_supervisorID:String,
+    panel_member_id:String,
 });
 
 const Topic = mongoose.model('Topic', topicSchema);
