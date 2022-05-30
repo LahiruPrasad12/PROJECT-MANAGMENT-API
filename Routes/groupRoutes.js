@@ -6,7 +6,7 @@ const router = express.Router();
 router.route('/')
     .get(authController.protect, authController.restrictTo('admin'), groupController.getAllGroups)
     .post(authController.protect, groupController.createGroup)
-    .patch(authController.protect, groupController.assignGroup)
+    .patch(authController.protect,  authController.checkGroup(),groupController.assignGroup)
 
 router.route('/register-topic')
     .patch(authController.protect, authController.checkGroup(), groupController.registerTopic)

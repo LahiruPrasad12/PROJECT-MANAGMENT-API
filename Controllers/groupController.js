@@ -40,45 +40,52 @@ exports.createGroup = catchAsync(async (req, res, next) => {
 
 //Assign student to group
 exports.assignGroup = catchAsync(async (req, res, next) => {
-  console.log(req.body.email)
-  req.body.email.forEach((email)=>{
-    console.log(email)
-  })
-  const user = await User.findOne({ email: req.body.email, active: true });
+  console.log(req.body.email);
+  let errors = [];
+  for (const email of req.body.email) {
+    const user = await User.findOne({ email: req.body.email, active: true });
+    const users = await User.find({ groupID: req.user.groupID, active: true });
 
-  //Check whether user is exists or user doesn't have a group
-  if (!user) return next(new AppError("Please enter valid email", 406));
-  if (user.groupID) return next(new AppError("This user already have an account", 404));
+    if(users.length>=4) return next(new AppError("Your group have maximum number of students", 406));
 
-  user.groupID = req.user.groupID;
-  const group = await Group.findById(req.user.groupID);
-  await user.save({ validateBeforeSave: false });
+    if (!user) {
+      errors.push(`${email} user doesn't exists`);
+      continue;
+    } else if (user.groupID) {
+      errors.push(`${email} user already have an account`);
+      continue;
+    }else if(user.role !== 'student'){
+      errors.push(`${email} user doesn't exists`);
+      continue;
+    }
+    user.groupID = req.user.groupID;
+    const group = await Group.findById(req.user.groupID);
+    await user.save({ validateBeforeSave: false });
+    try {
+      await sendEmail({
+        email: email,
+        subject: "Congratulations!!",
+        message: `You have been assign to ${group.name} by ${req.user.name}`
+      });
 
-
-  try {
-    await sendEmail({
-      email: req.body.email,
-      subject: "Congratulations!!",
-      message: `You have been assign to ${group.name} by ${req.user.name}`
+    } catch (err) {
+      return next(
+        new AppError(err.message),
+        500
+      );
+    }
+  }
+  if (errors.length > 0) {
+    res.status(400).json({
+      status: 400,
+      error:errors
     });
-
+  }else {
     res.status(200).json({
       status: "success",
-      message: "invitation has been sent"
+      message:"students added successfully"
     });
-
-  } catch (err) {
-    return next(
-      new AppError("There was an error sending the email. Try again later!"),
-      500
-    );
   }
-
-
-  res.status(200).json({
-    status: "success"
-
-  });
 });
 
 //Assign panel member to group
@@ -87,13 +94,13 @@ exports.assignPannelGroup = catchAsync(async (req, res, next) => {
   const panel_member = await User.findById(req.body.panel_member_id);
 
   //Check whether user is exists or user doesn't have a group
-  if (!group) return next(new AppError('Please select valid group', 406))
+  if (!group) return next(new AppError("Please select valid group", 406));
   if (group.panel_member_id) return next(new AppError("This group already have an panel member", 404));
 
-  console.log(panel_member)
+  console.log(panel_member);
   //Check whether user is exists or user doesn't have a group
-  if (!panel_member) return next(new AppError('Please select valid panel member', 406))
-  if (panel_member.role !== 'Panel-Member') return next(new AppError("Who is not a panel member", 404));
+  if (!panel_member) return next(new AppError("Please select valid panel member", 406));
+  if (panel_member.role !== "Panel-Member") return next(new AppError("Who is not a panel member", 404));
 
   group.panel_member_id = req.body.panel_member_id;
   group.save();
