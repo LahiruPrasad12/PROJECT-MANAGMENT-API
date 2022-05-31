@@ -4,8 +4,6 @@ const topicSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Please Enter name'],
-        unique: true,
-        lowercase: true,
     },
     state: {
         type: String,

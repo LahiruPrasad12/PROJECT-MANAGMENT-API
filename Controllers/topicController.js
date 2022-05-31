@@ -66,11 +66,12 @@ exports.registerTopicToPanel = catchAsync(async (req, res, next) => {
 
 exports.submitTopicToSupervisor = catchAsync(async (req, res, next) => {
 
-    const { name, state, category_id, supervisorID } = req.body;
+    const { name, category_id, supervisorID } = req.body;
+    req.body.state = 'supervisorPending'
     const userExists = await User.exists({ _id: supervisorID });
     if(userExists){
         const obj = new Topic({
-            name, state, category_id, supervisorID
+            name, category_id, supervisorID
         })
         obj.groupID = req.user.groupID
         const newDocument = await Topic.create(obj);
@@ -117,7 +118,20 @@ exports.submitTopicToCoSupervisor = catchAsync(async (req, res, next) => {
 
 })
 
+exports.getStaff = catchAsync(async (req, res, next) => {
+    const Respond = new Filters(User.find({researchFileId:req.body.category_id}), req.query).filter().sort().limitFields().paginate();
 
+    const filteredData = await Respond.query;
+
+    // SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        results: filteredData.length,
+        data: {
+            filteredData
+        }
+    });
+});
 
 //filter and return column that needed to be updated
 const filterObj = (obj, ...allowedFields) => {
