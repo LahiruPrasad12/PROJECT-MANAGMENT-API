@@ -19,4 +19,7 @@ router.route("/panel-submission")
 
 router.route("/staff")
   .post(authController.protect, topicController.getStaff);
+
+router.route("/my-topic")
+  .get(authController.protect,topicController.getMyTopic)
 module.exports = router;

@@ -133,6 +133,21 @@ exports.getStaff = catchAsync(async (req, res, next) => {
     });
 });
 
+exports.getMyTopic = catchAsync(async (req, res, next) => {
+    const Respond = new Filters(Topic.find({groupID:req.user.groupID}), req.query).filter().sort().limitFields().paginate();
+
+    const filteredData = await Respond.query;
+
+    // SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        results: filteredData.length,
+        data: {
+            filteredData
+        }
+    });
+})
+
 //filter and return column that needed to be updated
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
