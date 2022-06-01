@@ -11,9 +11,6 @@ const topicSchema = new mongoose.Schema({
         default: 'supervisorPending'
 
     },
-    url: {
-        type: String,
-    },
     category_id:{
         type: String,
         required: [true, 'Please select research filed'],

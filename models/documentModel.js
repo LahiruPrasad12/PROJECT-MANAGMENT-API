@@ -1,19 +1,30 @@
 const mongoose = require('mongoose');
 
 const documentSchema = new mongoose.Schema({
-    name: {
+    message: {
         type: String,
     },
     url: {
         type: String,
+        required: [true, 'Please url'],
     },
-    ownerType: {
+    receiverType: {
         type: String,
-        enum: ['admin', 'student'],
-        default: 'admin'
+        enum: ['admin', 'student','panel'],
+        default: 'admin',
     },
-    ownerId: {
+    receiverID: {
         type: String,
+        required: [true, 'Please provide a owner id'],
+    },
+    senderID:{
+        type: String,
+        required: [true, 'Please provide a sender id'],
+    },
+    active: {
+        type: Boolean,
+        default: true,
+        select: false
     }
 });
 
