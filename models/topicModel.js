@@ -4,17 +4,12 @@ const topicSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Please Enter name'],
-        unique: true,
-        lowercase: true,
     },
     state: {
         type: String,
-    enum: ['supervisorPending', 'co_supervisorPending','pane_member_pending','panel-approved', 'approved','decline'],
+    enum: ['supervisorPending', 'supervisorAccept','co_supervisorPending','co_supervisorAccept','pane_member_pending','panel-approved', 'approved','decline'],
         default: 'supervisorPending'
 
-    },
-    url: {
-        type: String,
     },
     category_id:{
         type: String,
