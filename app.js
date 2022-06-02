@@ -17,6 +17,8 @@ const researchTopic = require('./Routes/researchTopicRoutes');
 const topic = require('./Routes/topicRoutes');
 const supervisors = require('./Routes/superCosupervisorRoutes');
 const feedback = require('./Routes/feedBackRoutes');
+const chatRoutes = require("./routes/chatRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 const cors = require("cors");
 
 const app = express();
@@ -24,6 +26,7 @@ app.use(cors({
   origin:["http://localhost:3000"],
   credentials:true
 }));
+
 //GLOBAL MIDDLEWARES
 
 // Set security HTTP headers
@@ -65,6 +68,10 @@ app.use(
   })
 );
 
+
+
+
+
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
 
@@ -80,6 +87,8 @@ app.use('/api/topics', researchTopic);
 app.use('/api/submit-topic', topic);
 app.use('/api/supervisors', supervisors);
 app.use('/api/feedback', feedback);
+app.use("/api/chat", chatRoutes);
+app.use("/api/message", messageRoutes);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

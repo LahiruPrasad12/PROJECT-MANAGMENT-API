@@ -6,7 +6,7 @@ const router = express.Router();
 
 //This api-resource route for update and delete specific student
 router.route("/")
-  .get(authController.protect, authController.restrictTo("admin"), adminController.getAllUsers)
+  .get(authController.protect, adminController.getAllUsers)
   .post(authController.protect, authController.restrictTo("admin"), adminController.uploadDocument)
   .patch(authController.protect, authController.restrictTo("admin"), adminController.updateUser);
 
