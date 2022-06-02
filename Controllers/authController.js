@@ -225,9 +225,18 @@ exports.checkGroup = () => {
 
 //get current user
 exports.currentUser = catchAsync(async (req, res, next) => {
+  // console.log(req.user.concat(req.group))
+  console.log(req.user);
+  console.log(req.group);
+  let data = [];
+  data.push(req.user);
+  if (req.group) {
+    data.push(req.group);
+  }
+
   res.status(200).json({
     status: "success",
-    data: req.user,
+    data: data,
   });
 });
 

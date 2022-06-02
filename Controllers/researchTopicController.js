@@ -28,3 +28,4 @@ exports.getTopics = catchAsync(async (req, res, next) => {
         }
     });
 })
+

@@ -6,6 +6,7 @@ const multer = require('multer');
 const Group = require('../Models/groupModel');
 const User = require('../Models/userModel');
 const Topic = require('../Models/topicModel');
+const Document = require('../Models/documentModel');
 const sendEmail = require('../Utils/email');
 const ColumnFilter = require('../Utils/updateColumnFilter');
 
@@ -45,7 +46,17 @@ exports.registerTopicToPanel = catchAsync(async (req, res, next) => {
     const userExists = await User.exists({ _id: panel_member_id });
     if(userExists){
         const filteredBody = filterObj(req.body, 'state', 'panel_member_id');
-        filteredBody.url = req.file.filename
+
+
+        let obj = {
+            url:req.file.filename,
+            type:'student',
+            receiverID:req.user.groupID,
+            receiverType:'panel',
+            senderID:panel_member_id
+        }
+        const saveDoc = await Document.create(obj)
+        console.log(filteredBody)
         const updatedTopic= await Topic.findByIdAndUpdate(topic_id, filteredBody, {
             new: true,
             runValidators: true
@@ -66,11 +77,12 @@ exports.registerTopicToPanel = catchAsync(async (req, res, next) => {
 
 exports.submitTopicToSupervisor = catchAsync(async (req, res, next) => {
 
-    const { name, state, category_id, supervisorID } = req.body;
+    const { name, category_id, supervisorID } = req.body;
+    req.body.state = 'supervisorPending'
     const userExists = await User.exists({ _id: supervisorID });
     if(userExists){
         const obj = new Topic({
-            name, state, category_id, supervisorID
+            name, category_id, supervisorID
         })
         obj.groupID = req.user.groupID
         const newDocument = await Topic.create(obj);
@@ -117,7 +129,35 @@ exports.submitTopicToCoSupervisor = catchAsync(async (req, res, next) => {
 
 })
 
+exports.getStaff = catchAsync(async (req, res, next) => {
+    const Respond = new Filters(User.find({researchFileId:req.body.category_id}), req.query).filter().sort().limitFields().paginate();
 
+    const filteredData = await Respond.query;
+
+    // SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        results: filteredData.length,
+        data: {
+            filteredData
+        }
+    });
+});
+
+exports.getMyTopic = catchAsync(async (req, res, next) => {
+    const Respond = new Filters(Topic.find({groupID:req.user.groupID}), req.query).filter().sort().limitFields().paginate();
+
+    const filteredData = await Respond.query;
+
+    // SEND RESPONSE
+    res.status(200).json({
+        status: 'success',
+        results: filteredData.length,
+        data: {
+            filteredData
+        }
+    });
+})
 
 //filter and return column that needed to be updated
 const filterObj = (obj, ...allowedFields) => {
