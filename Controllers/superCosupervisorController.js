@@ -19,10 +19,7 @@ exports.getSupervisorRequest = catchAsync(async (req, res, next) => {
 
 exports.getPanelRequest = catchAsync(async (req, res, next) => {
   const Respond = await Topic.find({ panel_member_id: req.user._id, state: { $eq: 'pane_member_pending' }  });
-  const document = await Document.find({ receiverID: req.user._id});
-  console.log(req.user._id)
-  console.log(document)
-  Respond.push(document)
+
   // SEND RESPONSE
   res.status(200).json({
     status: "success",
