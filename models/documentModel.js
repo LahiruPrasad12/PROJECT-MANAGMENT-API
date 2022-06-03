@@ -24,7 +24,13 @@ const documentSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
         select: false
-    }
+    },
+    Type: {
+        type: String,
+        enum: ['document', 'topic-doc','presentation','final-thesis'],
+        default: 'topic-doc'
+
+    },
 });
 
 const Document = mongoose.model('Documents', documentSchema);
