@@ -9,6 +9,7 @@ const Topic = require('../Models/topicModel');
 const Document = require('../Models/documentModel');
 const sendEmail = require('../Utils/email');
 const ColumnFilter = require('../Utils/updateColumnFilter');
+const asyncHandler = require("express-async-handler");
 
 const multerStorage = FileUpload.setPath('public/documents/topicdocument')
 const multerFilter = FileUpload.FileTypeFilter('application')
@@ -97,8 +98,6 @@ exports.submitTopicToSupervisor = catchAsync(async (req, res, next) => {
             data:'please select valid supervisor'
         });
     }
-
-
 
 })
 
