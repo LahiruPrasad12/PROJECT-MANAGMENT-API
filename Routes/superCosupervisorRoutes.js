@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.route('/')
   .patch(authController.protect,authController.restrictTo("supervisor","Co-supervisor"),superVisor.acceptOrDeclineTopic)
+  .get(authController.protect,superVisor.getOurPanelMember)
 
 router.route('/supervisor')
   .get(authController.protect,authController.restrictTo("supervisor"),superVisor.getSupervisorRequest)
@@ -12,6 +13,10 @@ router.route('/supervisor')
 
 router.route('/co-supervisor')
   .get(authController.protect,authController.restrictTo("Co-supervisor"),superVisor.getCoSupervisorRequest)
+
+router.route('/panel')
+  .get(authController.protect,authController.restrictTo("Panel-Member"),superVisor.getPanelRequest)
+
 
 
 module.exports = router;
