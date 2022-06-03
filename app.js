@@ -19,6 +19,7 @@ const supervisors = require('./Routes/superCosupervisorRoutes');
 const feedback = require('./Routes/feedBackRoutes');
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const fileDownload = require("./Routes/fileDownloadRoutes");
 const cors = require("cors");
 
 const app = express();
@@ -89,6 +90,7 @@ app.use('/api/supervisors', supervisors);
 app.use('/api/feedback', feedback);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/download", fileDownload);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
