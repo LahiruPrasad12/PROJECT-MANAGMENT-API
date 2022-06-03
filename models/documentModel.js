@@ -10,12 +10,11 @@ const documentSchema = new mongoose.Schema({
     },
     receiverType: {
         type: String,
-        enum: ['admin', 'student','panel'],
+        enum: ['admin', 'student','panel','staff'],
         default: 'admin',
     },
     receiverID: {
         type: String,
-        required: [true, 'Please provide a owner id'],
     },
     senderID:{
         type: String,
@@ -25,7 +24,13 @@ const documentSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
         select: false
-    }
+    },
+    Type: {
+        type: String,
+        enum: ['document', 'topic-doc','presentation','final-thesis'],
+        default: 'topic-doc'
+
+    },
 });
 
 const Document = mongoose.model('Documents', documentSchema);

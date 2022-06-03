@@ -5,7 +5,7 @@ const groupSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please Enter name'],
         unique: true,
-        lowercase: true,
+        uppercase: true,
     },
     topicID : String,
     panel_member_id : String,
