@@ -10,12 +10,11 @@ const documentSchema = new mongoose.Schema({
     },
     receiverType: {
         type: String,
-        enum: ['admin', 'student','panel'],
+        enum: ['admin', 'student','panel','staff'],
         default: 'admin',
     },
     receiverID: {
         type: String,
-        required: [true, 'Please provide a owner id'],
     },
     senderID:{
         type: String,
