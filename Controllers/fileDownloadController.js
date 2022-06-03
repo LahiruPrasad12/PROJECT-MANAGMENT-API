@@ -7,7 +7,7 @@ exports.downloadTopicDocument = catchAsync(async (req, res, next) => {
   try{
     console.log('ava')
     console.log(req.user._id)
-    const Respond = await Document.find({receiverID:req.user._id});
+    const Respond = await Document.find({receiverID:req.user._id, active: { $eq: true } });
     console.log(Respond[0].url)
     // SEND RESPONSE
     res.download(`public/documents/topicdocument/${Respond[0].url}`)

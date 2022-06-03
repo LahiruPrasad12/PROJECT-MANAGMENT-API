@@ -4,7 +4,7 @@ const authController = require('../Controllers/authController')
 const router = express.Router();
 
 router.route('/')
-  .patch(authController.protect,authController.restrictTo("supervisor","Co-supervisor"),superVisor.acceptOrDeclineTopic)
+  .patch(authController.protect,authController.restrictTo("supervisor","Co-supervisor","Panel-Member"),superVisor.acceptOrDeclineTopic)
   .get(authController.protect,superVisor.getOurPanelMember)
 
 router.route('/supervisor')
