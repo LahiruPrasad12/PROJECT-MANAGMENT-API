@@ -18,3 +18,18 @@ exports.downloadTopicDocument = catchAsync(async (req, res, next) => {
     });
   }
 });
+
+exports.downloadMarkingSchema = catchAsync(async (req, res, next) => {
+  try{
+    console.log('ava')
+    const Respond = await Document.find({receiverType:'all' });
+    console.log(Respond[0].url)
+    // SEND RESPONSE
+    res.download(`public/documents/document/${Respond[0].url}`)
+  }catch (e) {
+    res.status(500).json({
+      status: 500,
+      results: e.message
+    });
+  }
+});
