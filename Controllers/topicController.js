@@ -54,7 +54,7 @@ exports.registerTopicToPanel = catchAsync(async (req, res, next) => {
             receiverID:panel_member_id,
             receiverType:'panel',
             senderID:req.user.groupID,
-            Type:'topic-register'
+            Type:'topic-doc'
         }
         const saveDoc = await Document.create(obj)
         console.log(filteredBody)
