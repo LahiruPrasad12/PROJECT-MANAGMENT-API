@@ -9,6 +9,7 @@ const Topic = require('../Models/topicModel');
 const Document = require('../Models/documentModel');
 const sendEmail = require('../Utils/email');
 const ColumnFilter = require('../Utils/updateColumnFilter');
+const asyncHandler = require("express-async-handler");
 
 const multerStorage = FileUpload.setPath('public/documents/topicdocument')
 const multerFilter = FileUpload.FileTypeFilter('application')
@@ -50,10 +51,10 @@ exports.registerTopicToPanel = catchAsync(async (req, res, next) => {
 
         let obj = {
             url:req.file.filename,
-            type:'student',
-            receiverID:req.user.groupID,
+            receiverID:panel_member_id,
             receiverType:'panel',
-            senderID:panel_member_id
+            senderID:req.user.groupID,
+            Type:'topic-register'
         }
         const saveDoc = await Document.create(obj)
         console.log(filteredBody)
@@ -97,8 +98,6 @@ exports.submitTopicToSupervisor = catchAsync(async (req, res, next) => {
             data:'please select valid supervisor'
         });
     }
-
-
 
 })
 

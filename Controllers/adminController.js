@@ -43,7 +43,7 @@ exports.uploadDocument = catchAsync(async (req, res, next) => {
 
 //get all users
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-    const Respond = new Filters(User.find({active:true}).select('+active'), req.query).filter().sort().limitFields().paginate();
+    const Respond = new Filters(User.find(), req.query).filter().sort().limitFields().paginate();
 
     const filteredData = await Respond.query;
 
