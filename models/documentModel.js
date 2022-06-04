@@ -10,7 +10,7 @@ const documentSchema = new mongoose.Schema({
     },
     receiverType: {
         type: String,
-        enum: ['admin', 'student','panel','staff'],
+        enum: ['admin', 'student','panel','staff','all'],
         default: 'admin',
     },
     receiverID: {
@@ -27,7 +27,7 @@ const documentSchema = new mongoose.Schema({
     },
     Type: {
         type: String,
-        enum: ['document', 'topic-doc','presentation','final-thesis'],
+        enum: ['document', 'topic-doc','presentation','final-thesis','marking-schema'],
         default: 'topic-doc'
 
     },
